@@ -28,3 +28,9 @@ export async function showAllPersons(Person) {
   const db = await openDb();
   return db.all("SELECT * FROM Person").then((res) => res);
 }
+
+export async function showUniquePerson(id){
+  const db = await openDb();
+  return db.get("SELECT * FROM Person WHERE id=?", [id])
+  .then((res) => res)
+}

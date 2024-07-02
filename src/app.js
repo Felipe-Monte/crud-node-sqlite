@@ -4,6 +4,7 @@ import {
   insertPerson,
   updatePerson,
   showAllPersons,
+  showUniquePerson,
 } from "./Controller/Person.js";
 
 import express from "express";
@@ -20,6 +21,11 @@ app.get("/", (request, response) => {
 app.get("/person", async (request, response) => {
   let allPersons = await showAllPersons();
   response.json(allPersons);
+});
+
+app.get("/person/:id", async (request, response) => {
+  let specificPerson = await showUniquePerson(request.params.id);
+  response.json(specificPerson);
 });
 
 app.post("/person", (request, response) => {
