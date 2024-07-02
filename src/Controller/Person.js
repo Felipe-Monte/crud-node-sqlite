@@ -14,3 +14,9 @@ export async function updatePerson(Person) {
   const db = await openDb();
   await db.run('UPDATE Person SET name=?, age=? WHERE id=?', [Person.name, Person.age, Person.id]);
 }
+
+export async function showAllPersons(Person){
+  const db = await openDb()
+  return db.all("SELECT * FROM Person")
+  .then(res => res)
+}
