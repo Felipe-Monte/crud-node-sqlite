@@ -3,7 +3,7 @@ import {
   createTable,
   insertPerson,
   updatePerson,
-  showAllPersons
+  showAllPersons,
 } from "./Controller/Person.js";
 
 import express from "express";
@@ -18,22 +18,22 @@ app.get("/", (request, response) => {
 });
 
 app.get("/person", async (request, response) => {
-  let allPersons = await showAllPersons()
-  response.json(allPersons)
+  let allPersons = await showAllPersons();
+  response.json(allPersons);
 });
 
 app.post("/person", (request, response) => {
-  if(!request.body.name){
+  if (!request.body.name) {
     return response.status(400).json({
-      "statusCode": 400,
-      "error": "Bad request",
-      "msg": "Campo nome está vazio!"
-    })
-  }else{
+      statusCode: 400,
+      error: "Bad request",
+      msg: "Campo nome está vazio!",
+    });
+  } else {
     insertPerson(request.body);
     return response.status(200).json({
-      "statusCode": 200,
-      "msg": "Pessoa inserida com sucesso!"
+      statusCode: 200,
+      msg: "Pessoa inserida com sucesso!",
     });
   }
 });
@@ -41,14 +41,14 @@ app.post("/person", (request, response) => {
 app.put("/person", (request, response) => {
   if (request.body && !request.body.id) {
     return response.status(400).json({
-      "statusCode": 400,
-      "msg": "ID não informado!",
+      statusCode: 400,
+      msg: "ID não informado!",
     });
   } else {
     updatePerson(request.body);
     return response.status(200).json({
-      "statusCode": 200,
-      "msg": "Pessoa atualizada com sucesso!"
+      statusCode: 200,
+      msg: "Pessoa atualizada com sucesso!",
     });
   }
 });
