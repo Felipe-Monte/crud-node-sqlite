@@ -1,4 +1,4 @@
-import { openDb } from "../configDB.js";
+import { openDb } from "../config/configDB.js";
 
 export async function createTable() {
   const db = await openDb();
