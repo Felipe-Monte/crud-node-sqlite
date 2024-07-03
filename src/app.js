@@ -62,18 +62,22 @@ app.put("/person", (request, response) => {
 
 app.delete("/person/:id", async (request, response) => {
   try {
-    // Verifique se o ID existe no banco de dados
     let specificPerson = await showUniquePerson(request.params.id);
-    
-    if (!specificPerson) {
-      return response.status(404).json({ message: "ID não encontrado no banco de dados" });
-    }
 
-    // ID encontrado, prosseguir com a exclusão
+    if (!specificPerson) {
+      return response.status(404).json({
+        message: "ID não encontrado no banco de dados",
+      });
+    }
     let deleteFromPerson = await deletePerson(request.params.id);
-    response.json({ message: "Pessoa deletada com sucesso" });
+    response.json({
+      message: "Pessoa deletada com sucesso",
+    });
   } catch (error) {
-    response.status(500).json({ message: "Erro ao tentar deletar a pessoa", error: error.message });
+    response.status(500).json({
+      message: "Erro ao tentar deletar a pessoa",
+      error: error.message,
+    });
   }
 });
 
