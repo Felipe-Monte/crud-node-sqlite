@@ -5,6 +5,7 @@ import {
   updatePerson,
   showAllPersons,
   showUniquePerson,
+  deletePerson,
 } from "./Controller/Person.js";
 
 import express from "express";
@@ -56,6 +57,23 @@ app.put("/person", (request, response) => {
       statusCode: 200,
       msg: "Pessoa atualizada com sucesso!",
     });
+  }
+});
+
+app.delete("/person/:id", async (request, response) => {
+  try {
+    // Verifique se o ID existe no banco de dados
+    let specificPerson = await showUniquePerson(request.params.id);
+    
+    if (!specificPerson) {
+      return response.status(404).json({ message: "ID não encontrado no banco de dados" });
+    }
+
+    // ID encontrado, prosseguir com a exclusão
+    let deleteFromPerson = await deletePerson(request.params.id);
+    response.json({ message: "Pessoa deletada com sucesso" });
+  } catch (error) {
+    response.status(500).json({ message: "Erro ao tentar deletar a pessoa", error: error.message });
   }
 });
 
