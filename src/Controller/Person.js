@@ -1,4 +1,5 @@
 import { openDb } from "../config/configDB.js";
+import AppError from "../utils/AppError.js"
 
 export async function createTable() {
   const db = await openDb();
@@ -22,8 +23,11 @@ export async function showSpecificPerson(req, res) {
 
 export async function insertPerson(req, res) {
   const Person = req.body;
-  const db = await openDb();
-  await db.run("INSERT INTO Person (name, age) VALUES (?, ?)", [
+  if(!req.body.name){
+    throw new AppError("Coloque um nome!", 400)
+  }else{
+    const db = await openDb();
+    await db.run("INSERT INTO Person (name, age) VALUES (?, ?)", [
     Person.name,
     Person.age,
   ]);
@@ -31,6 +35,7 @@ export async function insertPerson(req, res) {
     statusCode: 200,
     message: "Pessoa inserida com sucesso!",
   });
+  }
 }
 
 export async function updatePerson(req, res) {
