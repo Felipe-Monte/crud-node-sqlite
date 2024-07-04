@@ -4,14 +4,23 @@ import {
   insertPerson,
   updatePerson,
   showAllPersons,
-  showUniquePerson,
+  showSpecificPerson,
   deletePerson,
 } from "../controller/Person.js";
 
 const router = Router();
 
 router.get("/", (req, res) => {
-   res.send("Trabalhando com rotas")
+  res.json({
+    statusCode: 200,
+    message: "API Rondado",
+  });
 });
+
+router.get("/person", showAllPersons);
+router.get("/person/:id", showSpecificPerson);
+router.post("/person", insertPerson);
+router.put("/person", updatePerson);
+router.delete("/person/:id", deletePerson);
 
 export default router;
