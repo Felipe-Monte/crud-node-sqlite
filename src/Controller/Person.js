@@ -16,15 +16,21 @@ export async function showAllPersons(req, res) {
 export async function showSpecificPerson(req, res) {
   const id = req.params.id;
   const db = await openDb();
-  return db
-    .get("SELECT * FROM Person WHERE id=?", [id])
+
+  const person = await db.get("SELECT * FROM Person WHERE id=?", [id])
+ 
+  if(!person){
+    throw new AppError("Pessoa não existe no banco", 404)
+  }else{
+    return db.get("SELECT * FROM Person WHERE id=?", [id])
     .then((people) => res.json(people));
+  }
 }
 
 export async function insertPerson(req, res) {
   const Person = req.body;
-  if(!req.body.name){
-    throw new AppError("Coloque um nome!", 400)
+  if(!req.body.name || !req.body.age){
+    throw new AppError("Campo nome e idade não podem estar vazio!", 400)
   }else{
     const db = await openDb();
     await db.run("INSERT INTO Person (name, age) VALUES (?, ?)", [
@@ -39,26 +45,41 @@ export async function insertPerson(req, res) {
 }
 
 export async function updatePerson(req, res) {
+  const id = req.body.id
   const Person = req.body;
   const db = await openDb();
-  await db.run("UPDATE Person SET name=?, age=? WHERE id=?", [
-    Person.name,
-    Person.age,
-    Person.id,
-  ]);
-  res.json({
-    statusCode: 200,
-    message: "Pessoa atualizada com sucesso!",
-  });
+
+  const person = await db.get("SELECT * FROM Person WHERE id=?", [id])
+
+  if(!person){
+    throw new AppError("Pessoa não encontrada no banco", 404)
+  }else{
+    await db.run("UPDATE Person SET name=?, age=? WHERE id=?", [
+      Person.name,
+      Person.age,
+      Person.id,
+    ]);
+    res.json({
+      statusCode: 200,
+      message: "Pessoa atualizada com sucesso!",
+    });
+  }
 }
 
 export async function deletePerson(req, res) {
   const id = req.params.id;
   const db = await openDb();
-  return db.get("DELETE FROM Person WHERE id=?", [id]).then((people) =>
-    res.json({
-      statusCode: 200,
-      message: "Deletado com sucesso!",
-    })
-  );
+
+  const person = await db.get("SELECT * FROM Person WHERE id=?", [id])
+
+  if(!person){
+    throw new AppError("Pessoa não encontrada no banco!")
+  }else{
+    return db.get("DELETE FROM Person WHERE id=?", [id]).then((people) =>
+      res.json({
+        statusCode: 200,
+        message: "Deletado com sucesso!",
+      })
+    );
+  }
 }
