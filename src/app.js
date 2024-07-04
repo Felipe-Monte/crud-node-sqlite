@@ -1,10 +1,14 @@
 import 'express-async-errors';
 import AppError from './utils/AppError.js';
 import express from "express";
+import router from "./routes/routes.js";
+import { createPersonTable } from "./database/database.js"
+
 const app = express();
 app.use(express.json());
 
-import router from "./routes/routes.js";
+await createPersonTable()
+
 app.use(router);
 
 app.use((error, request, response, next) => {
