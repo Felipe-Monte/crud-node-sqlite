@@ -1,12 +1,6 @@
 import { Router } from "express";
-import {
-  createTable,
-  insertPerson,
-  updatePerson,
-  showAllPersons,
-  showSpecificPerson,
-  deletePerson,
-} from "../controller/Person.js";
+import PersonController from "../controller/PersonController.js"
+const personController = new PersonController()
 
 const router = Router();
 
@@ -17,10 +11,10 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/person", showAllPersons);
-router.get("/person/:id", showSpecificPerson);
-router.post("/person", insertPerson);
-router.put("/person", updatePerson);
-router.delete("/person/:id", deletePerson);
+router.get("/person", personController.index);
+router.get("/person/:id", personController.show);
+router.post("/person", personController.create);
+router.put("/person", personController.update);
+router.delete("/person/:id", personController.delete);
 
 export default router;
