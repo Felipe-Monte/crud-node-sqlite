@@ -2,13 +2,6 @@ import { openDb } from "../config/configDB.js";
 import AppError from "../utils/AppError.js"
 
 class PersonController {
-   async createTable() {
-    const db = await openDb();
-    await db.exec(
-      "CREATE TABLE IF NOT EXISTS Person (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)"
-    );
-  }
-  
    async index(req, res) {
     const db = await openDb();
     return db.all("SELECT * FROM Person").then((people) => res.json(people));
@@ -51,7 +44,7 @@ class PersonController {
     const db = await openDb();
   
     const person = await db.get("SELECT * FROM Person WHERE id=?", [id])
-  
+ 
     if(!person){
       throw new AppError("Pessoa não encontrada no banco", 404)
     }else{
