@@ -4,10 +4,17 @@ const personController = new PersonController()
 
 const router = Router();
 
-router.get("/", personController.index);
-router.get("/:id", personController.show);
+router.get("/", (req,res)=>{
+  res.json({
+    statusCode: 200,
+    message: "API rodando"
+  })
+})
+
+router.get("/person", personController.index);
+router.get("/person/:id", personController.show);
 router.post("/", personController.create);
-router.put("/", personController.update);
+router.put("/person", personController.update);
 router.delete("/:id", personController.delete);
 
 export default router;
